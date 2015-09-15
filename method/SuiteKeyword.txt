@@ -1,0 +1,10 @@
+*** Keyword ***
+GetClassByCondition
+    [Arguments]    ${countryName}    ${languageName}    ${type}
+    ${resp}=    rpcGetApiTest    getClassByCondition    countryName=${countryName}&languageName=${languageName}&type=${type}
+    [Return]    ${resp}
+
+GetContentByClassId
+    [Arguments]    ${classId}    ${excludeIds}
+    ${resp}=    rpcGetApiTest    getContentByClassId    classId=${classId}&excludeIds=${excludeIds}
+    [Return]    ${resp}

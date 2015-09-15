@@ -1,0 +1,29 @@
+*** Settings ***
+Documentation     A test suite containing tests related to Login.
+Library           HttpLibrary.HTTP
+Library           DatabaseLibrary
+Resource          ../ApiKeyword.txt
+Resource          ../ApiVariables.txt
+Resource          SuiteKeyword.txt
+
+*** Variables ***
+@{classId}        63
+@{excludeIds}     71
+
+*** Test Cases ***    method                      classId          excludeIds
+SmartPhone            GetContentByClassIdValid    @{classId}[0]    @{excludeIds}[0]
+
+*** Keywords ***
+GetContentByClassIdValid
+    [Arguments]    ${classId}    ${excludeIds}
+    ${resp}=    getContentByClassId    ${classId}    ${excludeIds}
+    ${resp}=    GetResultValue    ${resp}
+    LogPass
+
+T2
+    ${id}=    GetListKeyValue    ${resp}    0    id
+    ${icon}=    GetListKeyValue    ${resp}    0    icon
+    ${zoomSize}=    GetListKeyValue    ${resp}    0    zoomSize
+    ${type}=    GetListKeyValue    ${resp}    0    type
+    ${createTime}=    GetListKeyValue    ${resp}    0    createTime
+    ${sort}=    GetListKeyValue    ${resp}    0    sort

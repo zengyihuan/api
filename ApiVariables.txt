@@ -1,0 +1,3 @@
+*** Variables ***
+${SERVERIP}       3g.my-onetouch.com
+${APIURL}         /api

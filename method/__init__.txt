@@ -1,0 +1,6 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           Collections
+Library           DatabaseLibrary
+Resource          ../ApiKeyword.txt
+Resource          ../ApiVariables.txt

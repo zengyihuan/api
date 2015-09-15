@@ -1,0 +1,56 @@
+*** Keywords ***
+rpcGetApiTest
+    [Arguments]    ${method}    ${params}
+    Create Http Context    ${SERVERIP}
+    GET    ${APIURL}/${method}?${params}
+    ${resp}=    Get Response Body
+    [Return]    ${resp}
+
+rpcPostApiTest
+    [Arguments]    ${method}    ${params}
+    Create Http Context    ${SERVERIP}
+    ${req}=    Set Json Value    ${JSONRPC}    /params    ${params}
+    ${req}=    Set Json Value    ${req}    /method    ${method}
+    Set Request Body    ${req}
+    POST    ${APIURL}
+    ${resp}=    Get Response Body
+    [Return]    ${resp}
+
+Expect
+    [Arguments]    ${actualresp}    ${key}    ${value}
+    Json Value Should Equal    ${actualresp}    ${key}    ${value}
+    Log    expect check pass!
+
+GetResultValue
+    [Arguments]    ${resp}
+    ${resultvalue}=    Get Json Value    ${resp}    /data
+    [Return]    ${resultvalue}
+
+GetErrorMessage
+    [Arguments]    ${resp}
+    ${resultvalue}=    Get Json Value    ${resp}    /error/message
+    [Return]    ${resultvalue}
+
+GetKeyValue
+    [Arguments]    ${resp}    ${key}
+    ${keyvalue}=    Get Json Value    ${resp}    /${key}
+    [Return]    ${keyvalue}
+
+GetListKeyValue
+    [Arguments]    ${resp}    ${listNo}    ${key}
+    @{resp}=    Parse Json    ${resp}
+    ${resp}=    stringify json    @{resp}[${listNo}]
+    ${keyValue}=    Get json value    ${resp}    /${key}
+    [Return]    ${keyValue}
+
+LogPass
+    Log    ${TEST NAME} run success
+
+ConvertBool2Int
+    [Arguments]    ${key}
+    ${status}=    Run Keyword And Return Status    Should Be Equal    ${key}    true
+    Set Test Variable    ${key}    False
+    Run Keyword if    ${status}==True    Set Test Variable    ${key}    True
+    ...    ELSE    Log    "False"
+    ${key}=    Set Variable If    ${key}==True    1    0
+    [Return]    ${key}

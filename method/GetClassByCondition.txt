@@ -1,0 +1,43 @@
+*** Settings ***
+Documentation     A test suite containing tests related to Login.
+Library           HttpLibrary.HTTP
+Library           DatabaseLibrary
+Resource          ../ApiKeyword.txt
+Resource          ../ApiVariables.txt
+Resource          SuiteKeyword.txt
+
+*** Variables ***
+@{countryName}    ALL
+@{languageName}    ALL    zh-cn
+@{type}           1    2
+
+*** Test Cases ***    method                      countryName          languageName          type
+SmartPhone            GetClassByConditionValid    @{countryName}[0]    @{languageName}[0]    @{type}[0]
+
+FeaturedPhone         GetClassByConditionValid    @{countryName}[0]    @{languageName}[0]    @{type}[1]
+
+SmartPhone&zh-cn      GetClassByConditionValid    @{countryName}[0]    @{languageName}[1]    @{type}[0]
+
+*** Keywords ***
+GetClassByConditionValid
+    [Arguments]    ${countryName}    ${languageName}    ${type}
+    ${resp}=    GetClassByCondition    ${countryName}    ${languageName}    ${type}
+    ${resp}=    GetResultValue    ${resp}
+    ${id}=    GetListKeyValue    ${resp}    0    id
+    ${icon}=    GetListKeyValue    ${resp}    0    icon
+    ${zoomSize}=    GetListKeyValue    ${resp}    0    zoomSize
+    ${isRecommend}=    GetListKeyValue    ${resp}    0    isRecommend
+    ${type}=    GetListKeyValue    ${resp}    0    type
+    ${createTime}=    GetListKeyValue    ${resp}    0    createTime
+    ${sort}=    GetListKeyValue    ${resp}    0    sort
+    ${listContent}=    GetListKeyValue    ${resp}    0    listContent
+    ${id}=    GetListKeyValue    ${listContent}    0    id
+    ${classId}=    GetListKeyValue    ${listContent}    0    classId
+    ${contentName}=    GetListKeyValue    ${listContent}    0    contentName
+    ${icon}=    GetListKeyValue    ${listContent}    0    icon
+    ${zoomSize}=    GetListKeyValue    ${listContent}    0    zoomSize
+    ${url}=    GetListKeyValue    ${listContent}    0    url
+    ${type}=    GetListKeyValue    ${listContent}    0    type
+    ${createTime}=    GetListKeyValue    ${listContent}    0    createTime
+    ${sort}=    GetListKeyValue    ${listContent}    0    sort
+    LogPass
